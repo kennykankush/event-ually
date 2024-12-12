@@ -1,31 +1,53 @@
-FROM maven:3.9.9-eclipse-temurin-23
+FROM eclipse-temurin:21 AS builder
 
-LABEL name="event-ually"
+WORKDIR /app
 
-ARG APP_DIR=/app
+COPY . .
 
-COPY mvnw .
-COPY pom.xml .
-COPY .mvn .mvn
-COPY src src
+RUN ./mvnw install -Dmaven.test.skip=true
 
-RUN mvn package -Dmaven.test.skip=true
+FROM eclipse-temurin:21
 
-ENV SERVER_PORT=8080
+WORKDIR /app
 
-EXPOSE ${SERVER_PORT}
+COPY --from=builder /app/target/*.jar app.jar
 
-ENTRYPOINT java -jar target/event-ually-0.0.1-SNAPSHOT.jar
+ENV PORT=8080
+
+EXPOSE ${PORT}
+
+ENTRYPOINT SERVER_PORT=${PORT} java -jar /app/app.jar -Dserver.port=${PORT}
+
+
 
 # FROM maven:3.9.9-eclipse-temurin-23
 
-# ARG DEPLOY_DIR=/app
-    
-# WORKDIR ${DEPLOY_DIR}
-# COPY --from=compiler target/event-ually-0.0.1-SNAPSHOT.jar target/event-ually-0.0.1-SNAPSHOT.jar
-    
+# LABEL name="event-ually"
+
+# ARG APP_DIR=/app
+
+# COPY mvnw .
+# COPY pom.xml .
+# COPY .mvn .mvn
+# COPY src src
+
+# RUN mvn package -Dmaven.test.skip=true
+
 # ENV SERVER_PORT=8080
 
 # EXPOSE ${SERVER_PORT}
 
 # ENTRYPOINT java -jar target/event-ually-0.0.1-SNAPSHOT.jar
+
+# # FROM maven:3.9.9-eclipse-temurin-23
+
+# # ARG DEPLOY_DIR=/app
+    
+# # WORKDIR ${DEPLOY_DIR}
+# # COPY --from=compiler target/event-ually-0.0.1-SNAPSHOT.jar target/event-ually-0.0.1-SNAPSHOT.jar
+    
+# # ENV SERVER_PORT=8080
+
+# # EXPOSE ${SERVER_PORT}
+
+# # ENTRYPOINT java -jar target/event-ually-0.0.1-SNAPSHOT.jar
