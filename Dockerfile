@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN ./mvnw install -Dmaven.test.skip=true
+RUN mvnw install -Dmaven.test.skip=true
 
 FROM eclipse-temurin:21
 
