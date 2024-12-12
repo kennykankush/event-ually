@@ -22,6 +22,7 @@
                         <th>Event Size</th>
                         <th>Event Date</th>
                         <th>Participants Registered</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 
@@ -32,6 +33,17 @@
                         <td th:text="${event.eventSize}">Size</td>
                         <td th:text="${event.eventDate}">Date</td>
                         <td th:text="${event.participants}">Participants</td>
+                        <td>
+                            <!-- <a th:href="@{'/register'(name=${event.eventName}, date=${event.eventDate})}" class="btn btn-primary">
+                                Register
+                            </a> -->
+                            
+                            <form action="/register" method="post">
+                                <input type="hidden" name="name" th:value="${event.eventName}" />
+                                <input type="hidden" name="date" th:value="${event.eventDate}" />
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>

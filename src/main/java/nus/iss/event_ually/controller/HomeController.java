@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 
 import nus.iss.event_ually.model.Event;
 import nus.iss.event_ually.service.EventService;
-import nus.iss.event_ually.utils.FileManagement;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
