@@ -1,4 +1,4 @@
-FROM maven:3.9.9-eclipse-temurin-23
+FROM maven:3.9.9-eclipse-temurin-23 AS compiler
 
 LABEL name="event-ually"
 
@@ -11,6 +11,13 @@ COPY src src
 
 RUN mvn package -Dmaven.test.skip=true
 
+FROM maven:3.9.9-eclipse-temurin-23
+
+ARG DEPLOY_DIR=/app
+    
+WORKDIR ${DEPLOY_DIR}
+COPY --from=compiler target/ssf_2022_practice-0.0.1-SNAPSHOT.jar target/event-ually-0.0.1-SNAPSHOT.jar
+    
 ENV SERVER_PORT=8080
 
 EXPOSE ${SERVER_PORT}
